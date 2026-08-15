@@ -807,25 +807,39 @@ function toggleCart(productId) {
 
 function showCart() {
 
-  if (cart.length === 0) {
+  const selectedProducts =
+    products.filter(product =>
+      cart.includes(product.id)
+    );
+
+  if (selectedProducts.length === 0) {
 
     alert("🛒 Tu selección está vacía.");
 
     return;
   }
 
-  const selectedProducts =
-    products.filter(product =>
-      cart.includes(product.id)
+  const productList =
+    selectedProducts
+      .map(product =>
+        `• ${product.name} - ${Number(product.price).toLocaleString("es-AR")}`
+      )
+      .join("\n");
+
+  const confirmSend =
+    confirm(
+      "🛒 MI SELECCIÓN\n\n" +
+      productList +
+      "\n\n¿Querés enviar esta selección por WhatsApp?"
     );
+
+  if (!confirmSend) {
+    return;
+  }
 
   const message =
     "Hola! Estoy interesado en estos productos:\n\n" +
-    selectedProducts
-      .map(product =>
-        `• ${product.name} - $${Number(product.price).toLocaleString("es-AR")}`
-      )
-      .join("\n");
+    productList;
 
   const whatsapp =
     `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
