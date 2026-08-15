@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Ofertas Diarias</title>
 
   <style>
@@ -22,7 +21,7 @@
       background: #111;
       color: white;
       text-align: center;
-      padding: 25px 15px;
+      padding: 28px 15px;
     }
 
     header h1 {
@@ -47,7 +46,7 @@
       border: 1px solid #ddd;
       border-radius: 10px;
       font-size: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .categories {
@@ -58,11 +57,10 @@
     }
 
     .categories button {
-      border: none;
+      border: 0;
       background: white;
       padding: 10px 15px;
       border-radius: 20px;
-      cursor: pointer;
       white-space: nowrap;
     }
 
@@ -76,7 +74,7 @@
       background: white;
       border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
     }
 
     .product img {
@@ -123,6 +121,7 @@
       text-align: center;
       padding: 40px 10px;
       color: #666;
+      grid-column: 1 / -1;
     }
   </style>
 </head>
@@ -151,32 +150,55 @@
     <button onclick="filterCategory('Hogar')">Hogar</button>
   </div>
 
-  <div id="products" class="products"></div>
+  <div id="products" class="products">
+    <div class="empty">Cargando productos...</div>
+  </div>
 
 </div>
 
 <script>
-  const productsContainer = document.getElementById("products");
-  const searchInput = document.getElementById("search");
+  /*
+    CONFIGURACIÓN
+    ------------------------------------
+    Más adelante conectaremos acá
+    tu proyecto de Supabase.
+  */
+
+  const WHATSAPP = "5491176310928";
 
   let products = [];
   let selectedCategory = "Todos";
 
+  const productsContainer =
+    document.getElementById("products");
+
+  const searchInput =
+    document.getElementById("search");
+
   function renderProducts() {
 
-    const search = searchInput.value.toLowerCase();
+    const search =
+      searchInput.value.toLowerCase();
 
-    const filtered = products.filter(product => {
+    const filtered =
+      products.filter(product => {
 
-      const matchesSearch =
-        product.name.toLowerCase().includes(search);
+        const name =
+          (product.name || "").toLowerCase();
 
-      const matchesCategory =
-        selectedCategory === "Todos" ||
-        product.category === selectedCategory;
+        const category =
+          product.category || "";
 
-      return matchesSearch && matchesCategory;
-    });
+        const matchesSearch =
+          name.includes(search);
+
+        const matchesCategory =
+          selectedCategory === "Todos" ||
+          category === selectedCategory;
+
+        return matchesSearch &&
+               matchesCategory;
+      });
 
     if (filtered.length === 0) {
       productsContainer.innerHTML =
@@ -184,47 +206,61 @@
       return;
     }
 
-    productsContainer.innerHTML = filtered.map(product => {
+    productsContainer.innerHTML =
+      filtered.map(product => {
 
-      const image = product.image_url ||
-        "https://via.placeholder.com/500x400?text=Sin+foto";
+        const image =
+          product.image_url ||
+          "https://via.placeholder.com/500x400?text=Sin+foto";
 
-      const price = Number(product.price).toLocaleString(
-        "es-AR",
-        {
-          style: "currency",
-          currency: "ARS"
-        }
-      );
+        const price =
+          Number(product.price).toLocaleString(
+            "es-AR",
+            {
+              style: "currency",
+              currency: "ARS"
+            }
+          );
 
-      return `
-        <div class="product">
+        const message =
+          `Hola! Quiero consultar por ${product.name}`;
 
-          <img src="${image}" alt="${product.name}">
+        const whatsapp =
+          `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
 
-          <div class="product-info">
+        return `
+          <div class="product">
 
-            <h2>${product.name}</h2>
+            <img
+              src="${image}"
+              alt="${product.name}"
+            >
 
-            <div class="price">${price}</div>
+            <div class="product-info">
 
-            <div class="description">
-              ${product.description || ""}
+              <h2>${product.name}</h2>
+
+              <div class="price">
+                ${price}
+              </div>
+
+              <div class="description">
+                ${product.description || ""}
+              </div>
+
+              <a
+                class="whatsapp"
+                href="${whatsapp}"
+                target="_blank">
+                📲 Consultar por WhatsApp
+              </a>
+
             </div>
 
-            <a
-              class="whatsapp"
-              href="https://wa.me/?text=Hola!%20Quiero%20consultar%20por%20${encodeURIComponent(product.name)}"
-              target="_blank">
-              📲 Consultar por WhatsApp
-            </a>
-
           </div>
+        `;
 
-        </div>
-      `;
-
-    }).join("");
+      }).join("");
   }
 
   function filterCategory(category) {
@@ -232,16 +268,11 @@
     renderProducts();
   }
 
-  searchInput.addEventListener("input", renderProducts);
+  searchInput.addEventListener(
+    "input",
+    renderProducts
+  );
 
-  /*
-    Por ahora mostramos un mensaje.
-    En el próximo paso conectaremos esta página
-    con tu proyecto de Supabase.
-  */
-
-  productsContainer.innerHTML =
-    '<div class="empty">Cargando productos...</div>';
 </script>
 
 </body>
