@@ -251,16 +251,172 @@
 
   function renderProducts() {
 
-    const search =
-      searchInput.value.toLowerCase();
+  const search =
+    searchInput.value.toLowerCase();
 
-    const filtered =
-      products.filter(product => {
+  const filtered =
+    products.filter(product => {
 
-        const name =
-          (product.name || "").toLowerCase();
+      const name =
+        (product.name || "").toLowerCase();
 
-        const category =
+      const category =
+        product.category || "";
+
+      return (
+        name.includes(search) &&
+        (
+          selectedCategory === "Todos" ||
+          category === selectedCategory
+        )
+      );
+    });
+
+
+  if (filtered.length === 0) {
+
+    productsContainer.innerHTML = `
+      <div class="empty">
+        <div style="font-size:45px;">🛍️</div>
+        <h3>No encontramos productos</h3>
+        <p>Probá con otra búsqueda o categoría.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  productsContainer.innerHTML =
+    filtered.map(product => {
+
+      const image =
+        product.image_url ||
+        product.image ||
+        "https://via.placeholder.com/500x400?text=Sin+foto";
+
+
+      const price =
+        Number(product.price).toLocaleString(
+          "es-AR",
+          {
+            style: "currency",
+            currency: "ARS"
+          }
+        );
+
+
+      const stock =
+        Number(product.stock ?? 0);
+
+
+      let stockHTML = "";
+
+      if (stock <= 0) {
+
+        stockHTML = `
+          <div class="stock agotado">
+            🔴 Agotado
+          </div>
+        `;
+
+      } else if (stock <= 3) {
+
+        stockHTML = `
+          <div class="stock pocas">
+            🟠 ¡Últimas ${stock} unidades!
+          </div>
+        `;
+
+      } else {
+
+        stockHTML = `
+          <div class="stock disponible">
+            🟢 Disponible
+          </div>
+        `;
+
+      }
+
+
+      const message =
+        `Hola! Quiero consultar por ${product.name}`;
+
+
+      const whatsapp =
+        `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+
+      return `
+        <div class="product">
+
+          <div class="product-image">
+
+            ${
+              stock <= 0
+                ? `<span class="badge agotado-badge">AGOTADO</span>`
+                : `<span class="badge">🔥 OFERTA</span>`
+            }
+
+            <img
+              src="${image}"
+              alt="${product.name}"
+              loading="lazy"
+            >
+
+          </div>
+
+
+          <div class="product-info">
+
+            <div class="category">
+              ${product.category || "Otros"}
+            </div>
+
+
+            <h2>
+              ${product.name}
+            </h2>
+
+
+            <div class="price">
+              ${price}
+            </div>
+
+
+            ${stockHTML}
+
+
+            ${
+              product.description
+                ? `
+                  <div class="description">
+                    ${product.description}
+                  </div>
+                `
+                : ""
+            }
+
+
+            <a
+              class="whatsapp"
+              href="${whatsapp}"
+              target="_blank"
+              rel="noopener">
+
+              📲 Consultar por WhatsApp
+
+            </a>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+  }
+
+   const category =
           product.category || "";
 
         return (
