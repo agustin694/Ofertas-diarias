@@ -187,12 +187,66 @@
     document.getElementById("search");
 
 
-  async function loadProducts() {
+ async function loadProducts() {
+
+  productsContainer.innerHTML =
+    '<div class="empty">Cargando productos...</div>';
+
+  try {
+
+    const controller = new AbortController();
+
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, 10000);
+
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/rpc/get_public_products`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`
+        },
+
+        body: JSON.stringify({
+          p_user_id: USER_ID
+        }),
+
+        signal: controller.signal
+      }
+    );
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+
+      const errorText = await response.text();
+
+      throw new Error(
+        `Supabase respondió ${response.status}: ${errorText}`
+      );
+    }
+
+    products = await response.json();
+
+    console.log("PRODUCTOS RECIBIDOS:", products);
+
+    renderProducts();
+
+  } catch (error) {
+
+    console.error(error);
 
     productsContainer.innerHTML =
-      '<div class="empty">Cargando productos...</div>';
-
-    try {
+      `<div class="empty">
+        <h3>Error al cargar productos</h3>
+        <p>${error.message}</p>
+      </div>`;
+  }
+}  {
 
       const response = await fetch(
         `${SUPABASE_URL}/rest/v1/rpc/get_public_products`,
