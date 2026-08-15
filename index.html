@@ -649,6 +649,12 @@ let cart = JSON.parse(
       : "🤍"
   }
 </button>
+<button
+  class="select-btn"
+  onclick="toggleCart('${product.id}')"
+>
+  🛒 Agregar a mi selección
+</button>
 
               ${
   stock <= 0
@@ -776,6 +782,59 @@ function showFavorites() {
 
 }
 
+
+function toggleCart(productId) {
+
+  if (cart.includes(productId)) {
+
+    cart =
+      cart.filter(id => id !== productId);
+
+  } else {
+
+    cart.push(productId);
+
+  }
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  renderProducts();
+}
+
+
+function showCart() {
+
+  if (cart.length === 0) {
+
+    alert("🛒 Tu selección está vacía.");
+
+    return;
+  }
+
+  const selectedProducts =
+    products.filter(product =>
+      cart.includes(product.id)
+    );
+
+  const message =
+    "Hola! Estoy interesado en estos productos:\n\n" +
+    selectedProducts
+      .map(product =>
+        `• ${product.name} - $${Number(product.price).toLocaleString("es-AR")}`
+      )
+      .join("\n");
+
+  const whatsapp =
+    `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+  window.open(
+    whatsapp,
+    "_blank"
+  );
+}
 </script>
 
 </body>
