@@ -212,8 +212,12 @@
       );
 
       if (!response.ok) {
-        throw new Error("No se pudieron cargar los productos");
-      }
+  const errorText = await response.text();
+
+  throw new Error(
+    `Supabase respondió ${response.status}: ${errorText}`
+  );
+}
 
       products = await response.json();
 
@@ -224,8 +228,10 @@
       console.error(error);
 
       productsContainer.innerHTML =
-        '<div class="empty">No se pudieron cargar los productos.</div>';
-    }
+  `<div class="empty">
+    <h3>Error al cargar productos</h3>
+    <p>${error.message}</p>
+  </div>`;
   }
 
 
