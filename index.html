@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Ofertas Diarias</title>
 
   <style>
@@ -62,6 +63,11 @@
       padding: 10px 15px;
       border-radius: 20px;
       white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .categories button:hover {
+      background: #eee;
     }
 
     .products {
@@ -157,16 +163,21 @@
 </div>
 
 <script>
-  /*
-    CONFIGURACIÓN
-    ------------------------------------
-    Más adelante conectaremos acá
-    tu proyecto de Supabase.
-  */
 
-  const WHATSAPP = "5491176310928";
+  const SUPABASE_URL =
+    "https://hovuypchngweflamnubr.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_1234electro";
+
+  const USER_ID =
+    "0174480b-537e-48dd-ab9c-643e367043af";
+
+  const WHATSAPP =
+    "5491176310928";
 
   let products = [];
+
   let selectedCategory = "Todos";
 
   const productsContainer =
@@ -174,6 +185,48 @@
 
   const searchInput =
     document.getElementById("search");
+
+
+  async function loadProducts() {
+
+    productsContainer.innerHTML =
+      '<div class="empty">Cargando productos...</div>';
+
+    try {
+
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/rpc/get_public_products`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY
+          },
+
+          body: JSON.stringify({
+            p_user_id: USER_ID
+          })
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("No se pudieron cargar los productos");
+      }
+
+      products = await response.json();
+
+      renderProducts();
+
+    } catch (error) {
+
+      console.error(error);
+
+      productsContainer.innerHTML =
+        '<div class="empty">No se pudieron cargar los productos.</div>';
+    }
+  }
+
 
   function renderProducts() {
 
@@ -189,22 +242,24 @@
         const category =
           product.category || "";
 
-        const matchesSearch =
-          name.includes(search);
-
-        const matchesCategory =
-          selectedCategory === "Todos" ||
-          category === selectedCategory;
-
-        return matchesSearch &&
-               matchesCategory;
+        return (
+          name.includes(search) &&
+          (
+            selectedCategory === "Todos" ||
+            category === selectedCategory
+          )
+        );
       });
 
+
     if (filtered.length === 0) {
+
       productsContainer.innerHTML =
         '<div class="empty">No hay productos disponibles.</div>';
+
       return;
     }
+
 
     productsContainer.innerHTML =
       filtered.map(product => {
@@ -252,7 +307,9 @@
                 class="whatsapp"
                 href="${whatsapp}"
                 target="_blank">
+
                 📲 Consultar por WhatsApp
+
               </a>
 
             </div>
@@ -263,15 +320,22 @@
       }).join("");
   }
 
+
   function filterCategory(category) {
+
     selectedCategory = category;
+
     renderProducts();
   }
+
 
   searchInput.addEventListener(
     "input",
     renderProducts
   );
+
+
+  loadProducts();
 
 </script>
 
