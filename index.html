@@ -323,6 +323,22 @@
 
   <div class="categories">
 
+    <button onclick="filterCategory('Deportes')">
+  🏅 Deportes
+</button>
+
+<button onclick="filterCategory('Liquidación')">
+  🔥 Liquidación
+</button>
+    
+    <button onclick="showFavorites()">
+  ❤️ Favoritos
+</button>
+
+<button onclick="showCart()">
+  🛒 Mi selección
+</button>
+
     <button onclick="filterCategory('Todos')">
       Todos
     </button>
@@ -390,6 +406,14 @@
   let products = [];
 
   let selectedCategory = "Todos";
+
+  let favorites = JSON.parse(
+  localStorage.getItem("favorites") || "[]"
+);
+
+let cart = JSON.parse(
+  localStorage.getItem("cart") || "[]"
+);
 
 
   const productsContainer =
@@ -507,7 +531,13 @@
           name.includes(search) &&
           (
             selectedCategory === "Todos" ||
-            category === selectedCategory
+(
+  selectedCategory === "Liquidación"
+    ? product.is_liquidation === true
+    : selectedCategory === "__FAVORITES__"
+      ? favorites.includes(product.id)
+      : category === selectedCategory
+)
           )
         );
 
@@ -608,19 +638,36 @@
           <div class="product">
 
             <div class="product-image">
+            <button
+  class="favorite-btn"
+  onclick="toggleFavorite('${product.id}')"
+  aria-label="Agregar a favoritos"
+>
+  ${
+    favorites.includes(product.id)
+      ? "❤️"
+      : "🤍"
+  }
+</button>
 
               ${
-                stock <= 0
-                  ? `
-                    <span class="badge agotado">
-                      AGOTADO
-                    </span>
-                  `
-                  : `
-                    <span class="badge">
-                      🔥 OFERTA
-                    </span>
-                  `
+  stock <= 0
+    ? `
+      <span class="badge agotado">
+        AGOTADO
+      </span>
+    `
+    : product.is_liquidation === true
+      ? `
+        <span class="badge">
+          🔥 LIQUIDACIÓN
+        </span>
+      `
+      : `
+        <span class="badge">
+          🔥 OFERTA
+        </span>
+      `
               }
 
               <img
@@ -698,6 +745,36 @@
 
 
   loadProducts();
+
+  function toggleFavorite(productId) {
+
+  if (favorites.includes(productId)) {
+
+    favorites =
+      favorites.filter(id => id !== productId);
+
+  } else {
+
+    favorites.push(productId);
+
+  }
+
+  localStorage.setItem(
+    "favorites",
+    JSON.stringify(favorites)
+  );
+
+  renderProducts();
+}
+
+
+function showFavorites() {
+
+  selectedCategory = "__FAVORITES__";
+
+  renderProducts();
+
+}
 
 </script>
 
