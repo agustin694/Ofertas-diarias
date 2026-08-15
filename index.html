@@ -653,7 +653,11 @@ let cart = JSON.parse(
   class="select-btn"
   onclick="toggleCart('${product.id}')"
 >
-  🛒 Agregar a mi selección
+  ${
+    cart.includes(product.id)
+      ? "✅ Agregado a mi selección"
+      : "🛒 Agregar a mi selección"
+  }
 </button>
 
               ${
