@@ -830,17 +830,6 @@ function showCart() {
       )
       .join("\n");
 
-  const confirmSend =
-    confirm(
-      "🛒 MI SELECCIÓN\n\n" +
-      productList +
-      "\n\n¿Querés enviar esta selección por WhatsApp?"
-    );
-
-  if (!confirmSend) {
-    return;
-  }
-
   const message =
     "Hola! Estoy interesado en estos productos:\n\n" +
     productList;
@@ -848,10 +837,7 @@ function showCart() {
   const whatsapp =
     `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
 
-  window.open(
-    whatsapp,
-    "_blank"
-  );
+  window.location.href = whatsapp;
 }
 </script>
 
