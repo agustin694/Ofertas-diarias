@@ -286,8 +286,9 @@
       filtered.map(product => {
 
         const image =
-          product.image ||
-          "https://via.placeholder.com/500x400?text=Sin+foto";
+  product.image_url ||
+  product.image ||
+  "https://via.placeholder.com/500x400?text=Sin+foto";
 
         const price =
           Number(product.price).toLocaleString(
