@@ -202,25 +202,41 @@ letter-spacing: .2px;
        BUSCADOR
     ========================= */
 
-    .search-box {
-      margin: 20px 0;
-    }
-
     #search {
-      width: 100%;
-      padding: 16px 18px;
-      border: 2px solid #e5e5e5;
-      border-radius: 15px;
-      font-size: 16px;
-      outline: none;
-      background: white;
-      box-shadow: 0 3px 12px rgba(0,0,0,.04);
-    }
+  width: 100%;
+  padding: 17px 22px;
 
-    #search:focus {
-      border-color: #ff4b3e;
-      box-shadow: 0 0 0 4px rgba(255,75,62,.10);
-    }
+  border: 1px solid #dcdcdc;
+  border-radius: 12px;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  outline: none;
+
+  background: #ffffff;
+  color: #222;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.06);
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+
+#search::placeholder {
+  color: #888;
+}
+
+
+#search:focus {
+  border-color: #999;
+
+  box-shadow:
+    0 0 0 3px rgba(0,0,0,.08);
+}
 
 
     /* =========================
