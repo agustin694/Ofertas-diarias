@@ -2240,7 +2240,11 @@ const image =
     images.map(
       (img, index) => `
         <img
-          src="${img}"
+          src="${
+            typeof img === "string"
+              ? img
+              : img.image_url
+          }"
           alt="${product.name} - foto ${index + 1}"
           loading="lazy"
         >
