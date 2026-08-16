@@ -1,7 +1,23 @@
-<!DOCTYPE html><html lang="es"><head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Ofertas del Día</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <link
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ofertas del Día</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  >  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>  <style>
+  >
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
 
     * {
       box-sizing: border-box;
@@ -16,8 +32,12 @@
       min-height: 100vh;
     }
 
+    /* =========================
+       HEADER
+    ========================= */
+
     header {
-      background: linear-gradient(135deg, #171717, #292929);
+      background: linear-gradient(135deg,#171717,#292929);
       color: white;
       padding: 22px 15px;
       text-align: center;
@@ -39,6 +59,10 @@
       font-size: 14px;
     }
 
+    /* =========================
+       CONTENEDOR
+    ========================= */
+
     .container {
       max-width: 1150px;
       margin: auto;
@@ -46,7 +70,7 @@
     }
 
     /* =========================
-       CARRUSEL
+       CARRUSEL PRINCIPAL
     ========================= */
 
     .hero-slider {
@@ -56,7 +80,7 @@
       border-radius: 24px;
       overflow: hidden;
       margin-bottom: 22px;
-      background: linear-gradient(135deg, #ff4b3e, #ff766b);
+      background: linear-gradient(135deg,#ff4b3e,#ff766b);
       box-shadow: 0 10px 30px rgba(0,0,0,.12);
     }
 
@@ -115,7 +139,7 @@
       text-shadow: 0 2px 5px rgba(0,0,0,.25);
     }
 
-    .hero-content .hero-price {
+    .hero-price {
       font-size: 25px;
       font-weight: 900;
       margin-bottom: 12px;
@@ -277,7 +301,7 @@
     }
 
     /* =========================
-       GALERÍA DEL PRODUCTO
+       GALERÍA DE PRODUCTO
     ========================= */
 
     .product-image {
@@ -308,8 +332,37 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      scroll-snap-align: start;
       display: block;
+      scroll-snap-align: start;
+    }
+
+    .gallery-count {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 6;
+      background: rgba(0,0,0,.65);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    .gallery-hint {
+      position: absolute;
+      bottom: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 6;
+      background: rgba(0,0,0,.55);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      pointer-events: none;
+      white-space: nowrap;
     }
 
     /* =========================
@@ -364,7 +417,7 @@
       position: absolute;
       top: 14px;
       left: 14px;
-      z-index: 10;
+      z-index: 9;
       background: #555;
       color: white;
       padding: 7px 11px;
@@ -466,7 +519,7 @@
     }
 
     /* =========================
-       MI SELECCIÓN / ENVÍO
+       ENVÍO
     ========================= */
 
     .shipping-box {
@@ -606,6 +659,10 @@
       font-size: 13px;
     }
 
+    /* =========================
+       CELULAR
+    ========================= */
+
     @media (max-width: 600px) {
 
       header h1 {
@@ -629,7 +686,7 @@
         font-size: 23px;
       }
 
-      .hero-content .hero-price {
+      .hero-price {
         font-size: 21px;
       }
 
@@ -647,92 +704,163 @@
       }
     }
 
-  </style></head><body><header>  <h1>🔥 OFERTAS DEL DÍA</h1>  <p>Encontrá productos a excelentes precios</p></header><div class="container">  <div id="heroSlider" class="hero-slider"><div class="hero-slide active">
+  </style>
+</head>
 
-  <div class="hero-overlay">
+<body>
 
-    <div class="hero-content">
+<header>
 
-      <span class="tag">
-        🔥 OFERTAS DEL DÍA
-      </span>
+  <h1>🔥 OFERTAS DEL DÍA</h1>
 
-      <h2>Cargando productos...</h2>
+  <p>
+    Encontrá productos a excelentes precios
+  </p>
 
-      <div class="hero-price">
-        Esperá un momento
+</header>
+
+<div class="container">
+
+  <!-- CARRUSEL -->
+
+  <div id="heroSlider" class="hero-slider">
+
+    <div class="hero-slide active">
+
+      <div class="hero-overlay">
+
+        <div class="hero-content">
+
+          <span class="tag">
+            🔥 OFERTAS DEL DÍA
+          </span>
+
+          <h2>
+            Cargando productos...
+          </h2>
+
+          <div class="hero-price">
+            Esperá un momento
+          </div>
+
+        </div>
+
       </div>
 
     </div>
 
+    <div id="sliderDots" class="slider-dots"></div>
+
   </div>
+
+  <!-- BUSCADOR -->
+
+  <div class="search-box">
+
+    <input
+      id="search"
+      type="search"
+      placeholder="🔎 ¿Qué estás buscando?"
+    >
+
+  </div>
+
+  <!-- CATEGORÍAS -->
+
+  <div class="categories">
+
+    <button onclick="filterCategory('Todos')">
+      Todos
+    </button>
+
+    <button onclick="filterCategory('Cocina')">
+      🍳 Cocina
+    </button>
+
+    <button onclick="filterCategory('Hogar')">
+      🏠 Hogar
+    </button>
+
+    <button onclick="filterCategory('Electrodomésticos')">
+      ⚡ Electrodomésticos
+    </button>
+
+    <button onclick="filterCategory('Tecnología')">
+      📱 Tecnología
+    </button>
+
+    <button onclick="filterCategory('Deportes')">
+      🏅 Deportes
+    </button>
+
+    <button onclick="filterCategory('Lotes')">
+      📦 Lotes
+    </button>
+
+    <button onclick="filterCategory('Liquidación')">
+      🔥 Liquidación
+    </button>
+
+  </div>
+
+  <!-- FAVORITOS / SELECCIÓN -->
+
+  <div class="categories special-buttons">
+
+    <button onclick="showFavorites()">
+      ❤️ Favoritos
+    </button>
+
+    <button onclick="showCart()">
+      🛒 Mi selección
+    </button>
+
+  </div>
+
+  <!-- TÍTULO -->
+
+  <div class="section-title">
+
+    <h2>
+      Productos
+    </h2>
+
+    <span>
+      Elegí tu próximo producto
+    </span>
+
+  </div>
+
+  <!-- PRODUCTOS -->
+
+  <div id="products" class="products"></div>
 
 </div>
 
-<div id="sliderDots" class="slider-dots"></div>
+<!-- WHATSAPP -->
 
-  </div>  <div class="search-box"><input
-  id="search"
-  type="search"
-  placeholder="🔎 ¿Qué estás buscando?"
+<a
+  class="whatsapp-floating"
+  href="https://wa.me/5491176310928"
+  target="_blank"
+  rel="noopener"
 >
-
-  </div>  <div class="categories"><button onclick="filterCategory('Todos')">
-  Todos
-</button>
-
-<button onclick="filterCategory('Cocina')">
-  🍳 Cocina
-</button>
-
-<button onclick="filterCategory('Hogar')">
-  🏠 Hogar
-</button>
-
-<button onclick="filterCategory('Electrodomésticos')">
-  ⚡ Electrodomésticos
-</button>
-
-<button onclick="filterCategory('Tecnología')">
-  📱 Tecnología
-</button>
-
-<button onclick="filterCategory('Deportes')">
-  🏅 Deportes
-</button>
-
-<button onclick="filterCategory('Lotes')">
-  📦 Lotes
-</button>
-
-<button onclick="filterCategory('Liquidación')">
-  🔥 Liquidación
-</button>
-
-  </div>  <div class="categories special-buttons"><button onclick="showFavorites()">
-  ❤️ Favoritos
-</button>
-
-<button onclick="showCart()">
-  🛒 Mi selección
-</button>
-
-  </div>  <div class="section-title"><h2>Productos</h2>
-
-<span>Elegí tu próximo producto</span>
-
-  </div>  <div id="products" class="products"></div></div><a
-class="whatsapp-floating"
-href="https://wa.me/5491176310928"
-target="_blank"
-rel="noopener"
-
-«»
-
-📲
+  📲
 </a>
 
-<footer>  <p>© 2026 Ofertas del Día</p>  <p>Consultas y pedidos por WhatsApp</p></footer><script>
+<footer>
+
+  <p>
+    © 2026 Ofertas del Día
+  </p>
+
+  <p>
+    Consultas y pedidos por WhatsApp
+  </p>
+
+</footer>
+
+<script>
 
   /* =========================
      CONFIGURACIÓN
@@ -751,8 +879,6 @@ rel="noopener"
     "5491176310928";
 
   let products = [];
-
-  let productImages = {};
 
   let selectedCategory = "Todos";
 
@@ -773,172 +899,6 @@ rel="noopener"
     document.getElementById("search");
 
   /* =========================
-     OBTENER FOTOS ADICIONALES
-  ========================= */
-
-  async function loadProductImages() {
-
-    try {
-
-      const response = await fetch(
-
-        `${SUPABASE_URL}/rest/v1/product_images?user_id=eq.${USER_ID}&order=sort_order.asc`,
-
-        {
-
-          method: "GET",
-
-          headers: {
-
-            "apikey": SUPABASE_KEY,
-
-            "Authorization":
-              `Bearer ${SUPABASE_KEY}`
-
-          }
-
-        }
-
-      );
-
-      if (!response.ok) {
-
-        console.error(
-          "No se pudieron cargar las fotos adicionales:",
-          await response.text()
-        );
-
-        return;
-
-      }
-
-      const rows = await response.json();
-
-      productImages = {};
-
-      rows.forEach(row => {
-
-        if (!productImages[row.product_id]) {
-
-          productImages[row.product_id] = [];
-
-        }
-
-        if (row.image_url) {
-
-          productImages[row.product_id].push(
-            row.image_url
-          );
-
-        }
-
-      });
-
-      console.log(
-        "FOTOS ADICIONALES:",
-        productImages
-      );
-
-    }
-
-    catch (error) {
-
-      console.error(
-        "Error cargando product_images:",
-        error
-      );
-
-    }
-
-  }
-
-  /* =========================
-     OBTENER TODAS LAS FOTOS
-  ========================= */
-
-  function getProductImages(product) {
-
-    const extraImages =
-      productImages[product.id] || [];
-
-    let images = [];
-
-    /*
-      Primero usamos las fotos de
-      product_images.
-    */
-
-    images.push(
-      ...extraImages
-    );
-
-    /*
-      También soportamos imágenes que
-      vengan directamente desde la función.
-    */
-
-    const rpcImages =
-      product.images ||
-      product.Images;
-
-    if (Array.isArray(rpcImages)) {
-
-      rpcImages.forEach(img => {
-
-        const url =
-          typeof img === "string"
-            ? img
-            : img?.image_url;
-
-        if (url) {
-
-          images.push(url);
-
-        }
-
-      });
-
-    }
-
-    /*
-      Finalmente agregamos image_url
-      como respaldo.
-    */
-
-    if (
-      product.image_url &&
-      !images.includes(product.image_url)
-    ) {
-
-      images.push(
-        product.image_url
-      );
-
-    }
-
-    /*
-      Si no hay ninguna foto.
-    */
-
-    if (!images.length) {
-
-      images.push(
-        "https://via.placeholder.com/500x400?text=Sin+foto"
-      );
-
-    }
-
-    /*
-      Eliminamos duplicadas.
-    */
-
-    return [
-      ...new Set(images)
-    ];
-
-  }
-
-  /* =========================
      CARRUSEL
   ========================= */
 
@@ -951,9 +911,7 @@ rel="noopener"
   function getRandomProducts() {
 
     if (!products.length) {
-
       return [];
-
     }
 
     const shuffled =
@@ -965,15 +923,12 @@ rel="noopener"
       0,
       Math.min(6, shuffled.length)
     );
-
   }
 
   function startSlider() {
 
     if (!products.length) {
-
       return;
-
     }
 
     sliderProducts =
@@ -984,9 +939,7 @@ rel="noopener"
     renderHeroSlide();
 
     if (sliderTimer) {
-
       clearInterval(sliderTimer);
-
     }
 
     sliderTimer =
@@ -1003,44 +956,44 @@ rel="noopener"
             getRandomProducts();
 
           sliderIndex = 0;
-
         }
 
         renderHeroSlide();
 
       }, 4000);
-
   }
 
   function renderHeroSlide() {
 
     const slider =
-      document.getElementById(
-        "heroSlider"
-      );
+      document.getElementById("heroSlider");
 
     const dots =
-      document.getElementById(
-        "sliderDots"
-      );
+      document.getElementById("sliderDots");
 
     if (
       !slider ||
       !sliderProducts.length
     ) {
-
       return;
-
     }
 
     const product =
       sliderProducts[sliderIndex];
 
     const images =
-      getProductImages(product);
+      Array.isArray(product.images)
+        ? product.images
+        : [];
 
     const image =
-      images[0];
+      images.length > 0
+        ? images[0]
+        : (
+            product.image_url ||
+            product.image ||
+            "https://via.placeholder.com/900x500?text=Sin+foto"
+          );
 
     const price =
       Number(product.price)
@@ -1052,14 +1005,11 @@ rel="noopener"
           }
         );
 
-    const oldSlides =
-      slider.querySelectorAll(
-        ".hero-slide"
+    slider
+      .querySelectorAll(".hero-slide")
+      .forEach(
+        slide => slide.remove()
       );
-
-    oldSlides.forEach(
-      slide => slide.remove()
-    );
 
     const slide =
       document.createElement("div");
@@ -1070,8 +1020,8 @@ rel="noopener"
     slide.innerHTML = `
 
       <img
-        src="${image}"
-        alt="${product.name}"
+        src="${escapeHtml(image)}"
+        alt="${escapeHtml(product.name)}"
       >
 
       <div class="hero-overlay">
@@ -1083,7 +1033,7 @@ rel="noopener"
           </span>
 
           <h2>
-            ${product.name}
+            ${escapeHtml(product.name)}
           </h2>
 
           <div class="hero-price">
@@ -1121,7 +1071,6 @@ rel="noopener"
           `
         )
         .join("");
-
   }
 
   function goToProduct(productId) {
@@ -1139,7 +1088,6 @@ rel="noopener"
       });
 
       return;
-
     }
 
     selectedCategory = "Todos";
@@ -1165,7 +1113,6 @@ rel="noopener"
       }
 
     }, 100);
-
   }
 
   /* =========================
@@ -1200,23 +1147,16 @@ rel="noopener"
             method: "POST",
 
             headers: {
-              "Content-Type":
-                "application/json",
-
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                `Bearer ${SUPABASE_KEY}`
+              "Content-Type": "application/json",
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${SUPABASE_KEY}`
             },
 
-            body:
-              JSON.stringify({
-                p_user_id: USER_ID
-              }),
+            body: JSON.stringify({
+              p_user_id: USER_ID
+            }),
 
-            signal:
-              controller.signal
+            signal: controller.signal
           }
         );
 
@@ -1230,27 +1170,27 @@ rel="noopener"
         throw new Error(
           `Supabase respondió ${response.status}: ${errorText}`
         );
-
       }
 
       products =
         await response.json();
 
-      console.log(
-        "PRODUCTOS RECIBIDOS:",
-        products
-      );
-
       /*
-        AHORA CARGAMOS LAS FOTOS
-        DE product_images.
-      */
+       * IMPORTANTE:
+       * Las fotos adicionales están en product_images.
+       * Las buscamos directamente.
+       */
 
       await loadProductImages();
 
       console.log(
+        "PRODUCTOS FINALES:",
+        products
+      );
+
+      console.log(
         "FOTOS DEL PRIMER PRODUCTO:",
-        getProductImages(products[0] || {})
+        products[0]?.images
       );
 
       renderProducts();
@@ -1272,15 +1212,147 @@ rel="noopener"
           </h3>
 
           <p>
-            ${error.message}
+            ${escapeHtml(error.message)}
           </p>
 
         </div>
 
       `;
+    }
+  }
 
+  /* =========================
+     CARGAR FOTOS ADICIONALES
+  ========================= */
+
+  async function loadProductImages() {
+
+    /*
+     * Primero ponemos la imagen principal
+     * como primera foto.
+     */
+
+    products.forEach(product => {
+
+      product.images = [];
+
+      if (product.image_url) {
+
+        product.images.push(
+          product.image_url
+        );
+
+      }
+    });
+
+    if (!products.length) {
+      return;
     }
 
+    const productIds =
+      products
+        .map(product => product.id)
+        .filter(Boolean);
+
+    if (!productIds.length) {
+      return;
+    }
+
+    /*
+     * Consultamos product_images.
+     */
+
+    const query =
+      productIds
+        .map(id => `"${id}"`)
+        .join(",");
+
+    const url =
+      `${SUPABASE_URL}/rest/v1/product_images` +
+      `?select=product_id,image_url,sort_order` +
+      `&product_id=in.(${encodeURIComponent(query)})` +
+      `&user_id=eq.${encodeURIComponent(USER_ID)}` +
+      `&order=sort_order.asc,id.asc`;
+
+    const response =
+      await fetch(
+        url,
+        {
+          method: "GET",
+
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`
+          }
+        }
+      );
+
+    if (!response.ok) {
+
+      const errorText =
+        await response.text();
+
+      console.error(
+        "No se pudieron cargar product_images:",
+        errorText
+      );
+
+      return;
+    }
+
+    const extraImages =
+      await response.json();
+
+    /*
+     * Agregamos cada foto al producto correspondiente.
+     */
+
+    extraImages.forEach(row => {
+
+      const product =
+        products.find(
+          p => p.id === row.product_id
+        );
+
+      if (
+        product &&
+        row.image_url
+      ) {
+
+        if (
+          !product.images.includes(
+            row.image_url
+          )
+        ) {
+
+          product.images.push(
+            row.image_url
+          );
+
+        }
+      }
+
+    });
+
+    console.log(
+      "FOTOS ADICIONALES:",
+      extraImages
+    );
+
+  }
+
+  /* =========================
+     ESCAPAR HTML
+  ========================= */
+
+  function escapeHtml(value) {
+
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   /* =========================
@@ -1311,7 +1383,6 @@ rel="noopener"
           &&
 
           (
-
             selectedCategory === "Todos"
 
             ||
@@ -1329,25 +1400,19 @@ rel="noopener"
 
               ?
 
-              favorites.includes(
-                product.id
-              )
+              favorites.includes(product.id)
 
               :
 
               category === selectedCategory
-
             )
-
           )
 
         );
 
       });
 
-    if (
-      filtered.length === 0
-    ) {
+    if (!filtered.length) {
 
       productsContainer.innerHTML = `
 
@@ -1370,186 +1435,248 @@ rel="noopener"
       `;
 
       return;
-
     }
 
     productsContainer.innerHTML =
+      filtered
+        .map(product => {
 
-      filtered.map(product => {
+          /*
+           * TOMAMOS TODAS LAS FOTOS.
+           */
 
-        /*
-          ACÁ ESTÁ LA CORRECCIÓN PRINCIPAL:
-          obtenemos TODAS las fotos del producto.
-        */
+          const images =
+            Array.isArray(product.images) &&
+            product.images.length
 
-        const images =
-          getProductImages(product);
+              ?
 
-        const price =
-          Number(product.price)
-            .toLocaleString(
-              "es-AR",
-              {
-                style: "currency",
-                currency: "ARS"
-              }
-            );
+              product.images
 
-        const stock =
-          Number(
-            product.stock ?? 0
-          );
+              :
 
-        let stockHTML = "";
+              [
+                product.image_url ||
+                product.image ||
+                "https://via.placeholder.com/500x400?text=Sin+foto"
+              ];
 
-        if (stock <= 0) {
-
-          stockHTML = `
-
-            <div class="stock agotado">
-              🔴 Agotado
-            </div>
-
-          `;
-
-        }
-
-        else if (stock <= 3) {
-
-          stockHTML = `
-
-            <div class="stock pocas">
-              🟠 Últimas ${stock} unidades
-            </div>
-
-          `;
-
-        }
-
-        else {
-
-          stockHTML = `
-
-            <div class="stock disponible">
-              🟢 Disponible
-            </div>
-
-          `;
-
-        }
-
-        const message =
-          `Hola! Quiero consultar por ${product.name}`;
-
-        const whatsapp =
-          `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
-
-        return `
-
-          <div
-            class="product"
-            data-product-id="${product.id}"
-          >
-
-            <div class="product-image">
-
-              <button
-                class="favorite-btn"
-                onclick="toggleFavorite('${product.id}')"
-                aria-label="Agregar a favoritos"
-              >
-                ${
-                  favorites.includes(product.id)
-                    ? "❤️"
-                    : "🤍"
+          const price =
+            Number(product.price)
+              .toLocaleString(
+                "es-AR",
+                {
+                  style: "currency",
+                  currency: "ARS"
                 }
-              </button>
+              );
 
-              <button
-                class="select-btn"
-                onclick="toggleCart('${product.id}')"
-              >
+          const stock =
+            Number(product.stock ?? 0);
+
+          let stockHTML = "";
+
+          if (stock <= 0) {
+
+            stockHTML = `
+
+              <div class="stock agotado">
+                🔴 Agotado
+              </div>
+
+            `;
+
+          }
+
+          else if (stock <= 3) {
+
+            stockHTML = `
+
+              <div class="stock pocas">
+                🟠 Últimas ${stock} unidades
+              </div>
+
+            `;
+
+          }
+
+          else {
+
+            stockHTML = `
+
+              <div class="stock disponible">
+                🟢 Disponible
+              </div>
+
+            `;
+          }
+
+          const message =
+            `Hola! Quiero consultar por ${product.name}`;
+
+          const whatsapp =
+            `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+          /*
+           * GALERÍA COMPLETA.
+           */
+
+          const gallery =
+            images
+              .map((img, index) => {
+
+                const imageUrl =
+                  typeof img === "string"
+                    ? img
+                    : img?.image_url;
+
+                return `
+
+                  <img
+                    src="${escapeHtml(imageUrl)}"
+                    alt="${escapeHtml(product.name)} - foto ${index + 1}"
+                    loading="lazy"
+                  >
+
+                `;
+
+              })
+              .join("");
+
+          return `
+
+            <div
+              class="product"
+              data-product-id="${product.id}"
+            >
+
+              <div class="product-image">
+
                 ${
-                  cart.includes(product.id)
-                    ? "✅ Agregado a mi selección"
-                    : "🛒 Agregar a mi selección"
-                }
-              </button>
+                  images.length > 1
+                    ?
 
-              ${
-                stock <= 0
-                  ? `
+                    `
+
+                    <div class="gallery-count">
+                      📷 ${images.length} fotos
+                    </div>
+
+                    <div class="gallery-hint">
+                      ← Deslizá para ver más →
+                    </div>
+
+                    `
+
+                    :
+
+                    ""
+                }
+
+                <button
+                  class="favorite-btn"
+                  onclick="toggleFavorite('${product.id}')"
+                  aria-label="Agregar a favoritos"
+                >
+                  ${
+                    favorites.includes(product.id)
+                      ? "❤️"
+                      : "🤍"
+                  }
+                </button>
+
+                <button
+                  class="select-btn"
+                  onclick="toggleCart('${product.id}')"
+                >
+                  ${
+                    cart.includes(product.id)
+                      ? "✅ Agregado a mi selección"
+                      : "🛒 Agregar a mi selección"
+                  }
+                </button>
+
+                ${
+                  stock <= 0
+
+                    ?
+
+                    `
+
                     <span class="badge agotado">
                       AGOTADO
                     </span>
-                  `
-                  : ""
-              }
 
-              <div class="product-gallery">
-
-                ${
-                  images.map(
-                    (img, index) => `
-                      <img
-                        src="${img}"
-                        alt="${product.name} - foto ${index + 1}"
-                        loading="lazy"
-                      >
                     `
-                  ).join("")
+
+                    :
+
+                    ""
                 }
+
+                <div class="product-gallery">
+
+                  ${gallery}
+
+                </div>
 
               </div>
 
-            </div>
+              <div class="product-info">
 
-            <div class="product-info">
+                <div class="category">
+                  ${
+                    escapeHtml(
+                      product.category || "Otros"
+                    )
+                  }
+                </div>
 
-              <div class="category">
+                <h2>
+                  ${escapeHtml(product.name)}
+                </h2>
+
+                <div class="price">
+                  ${price}
+                </div>
+
+                ${stockHTML}
+
                 ${
-                  product.category ||
-                  "Otros"
-                }
-              </div>
+                  product.description
 
-              <h2>
-                ${product.name}
-              </h2>
+                    ?
 
-              <div class="price">
-                ${price}
-              </div>
+                    `
 
-              ${stockHTML}
-
-              ${
-                product.description
-                  ? `
                     <div class="description">
-                      ${product.description}
+                      ${escapeHtml(product.description)}
                     </div>
-                  `
-                  : ""
-              }
 
-              <a
-                class="whatsapp"
-                href="${whatsapp}"
-                target="_blank"
-                rel="noopener"
-              >
-                📲 Consultar por WhatsApp
-              </a>
+                    `
+
+                    :
+
+                    ""
+                }
+
+                <a
+                  class="whatsapp"
+                  href="${whatsapp}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  📲 Consultar por WhatsApp
+                </a>
+
+              </div>
 
             </div>
 
-          </div>
+          `;
 
-        `;
-
-      }).join("");
-
+        })
+        .join("");
   }
 
   /* =========================
@@ -1562,7 +1689,6 @@ rel="noopener"
       category;
 
     renderProducts();
-
   }
 
   searchInput.addEventListener(
@@ -1599,7 +1725,6 @@ rel="noopener"
     );
 
     renderProducts();
-
   }
 
   function showFavorites() {
@@ -1608,7 +1733,6 @@ rel="noopener"
       "__FAVORITES__";
 
     renderProducts();
-
   }
 
   /* =========================
@@ -1640,7 +1764,6 @@ rel="noopener"
     );
 
     renderProducts();
-
   }
 
   /* =========================
@@ -1661,16 +1784,13 @@ rel="noopener"
           cart.includes(product.id)
       );
 
-    if (
-      selectedProducts.length === 0
-    ) {
+    if (!selectedProducts.length) {
 
       alert(
         "🛒 Tu selección está vacía."
       );
 
       return;
-
     }
 
     const productList =
@@ -1742,12 +1862,10 @@ rel="noopener"
         <div id="map"></div>
 
         <p class="shipping-note">
-
           Escribí tu dirección y tocá
           "Buscar dirección en el mapa".
           Verificá que el marcador esté
           ubicado correctamente.
-
         </p>
 
         <button
@@ -1769,7 +1887,6 @@ rel="noopener"
     `;
 
     iniciarMapa();
-
   }
 
   function iniciarMapa() {
@@ -1783,14 +1900,14 @@ rel="noopener"
         map = null;
 
         marker = null;
-
       }
 
       map =
-        L.map("map").setView(
-          [-34.5150, -58.7590],
-          13
-        );
+        L.map("map")
+          .setView(
+            [-34.5150,-58.7590],
+            13
+          );
 
       L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -1801,7 +1918,6 @@ rel="noopener"
       ).addTo(map);
 
     }, 100);
-
   }
 
   async function buscarDireccion() {
@@ -1821,7 +1937,6 @@ rel="noopener"
       );
 
       return;
-
     }
 
     try {
@@ -1854,7 +1969,6 @@ rel="noopener"
         );
 
         return;
-
       }
 
       const lat =
@@ -1869,14 +1983,14 @@ rel="noopener"
       };
 
       map.setView(
-        [lat, lon],
+        [lat,lon],
         16
       );
 
       if (marker) {
 
         marker.setLatLng(
-          [lat, lon]
+          [lat,lon]
         );
 
       }
@@ -1885,7 +1999,7 @@ rel="noopener"
 
         marker =
           L.marker(
-            [lat, lon]
+            [lat,lon]
           ).addTo(map);
 
       }
@@ -1905,9 +2019,7 @@ rel="noopener"
       alert(
         "⚠️ No se pudo buscar la dirección. Revisá tu conexión."
       );
-
     }
-
   }
 
   /* =========================
@@ -1941,7 +2053,6 @@ rel="noopener"
       );
 
       return;
-
     }
 
     if (!phone) {
@@ -1951,7 +2062,6 @@ rel="noopener"
       );
 
       return;
-
     }
 
     if (!address) {
@@ -1961,7 +2071,6 @@ rel="noopener"
       );
 
       return;
-
     }
 
     if (!selectedLocation) {
@@ -1971,7 +2080,6 @@ rel="noopener"
       );
 
       return;
-
     }
 
     const selectedProducts =
@@ -1980,16 +2088,13 @@ rel="noopener"
           cart.includes(product.id)
       );
 
-    if (
-      selectedProducts.length === 0
-    ) {
+    if (!selectedProducts.length) {
 
       alert(
         "🛒 Tu selección está vacía."
       );
 
       return;
-
     }
 
     const productList =
@@ -2001,19 +2106,30 @@ rel="noopener"
         .join("\n");
 
     const message =
+
       "Hola! Quiero realizar este pedido:\n\n" +
+
       productList +
+
       "\n\n" +
+
       "👤 Nombre: " +
       name +
+
       "\n" +
+
       "📞 Teléfono: " +
       phone +
+
       "\n" +
+
       "📍 Dirección de entrega: " +
       address +
+
       "\n\n" +
+
       "🗺️ Ubicación:\n" +
+
       `https://www.google.com/maps?q=${selectedLocation.lat},${selectedLocation.lon}`;
 
     const whatsapp =
@@ -2021,7 +2137,6 @@ rel="noopener"
 
     window.location.href =
       whatsapp;
-
   }
 
   /* =========================
@@ -2037,7 +2152,6 @@ rel="noopener"
       "";
 
     renderProducts();
-
   }
 
   /* =========================
@@ -2046,5 +2160,7 @@ rel="noopener"
 
   loadProducts();
 
-</script></body>
+</script>
+
+</body>
 </html>
