@@ -660,25 +660,16 @@ let cart = JSON.parse(
   }
 </button>
 
-              ${
+              
+  ${
   stock <= 0
     ? `
       <span class="badge agotado">
         AGOTADO
       </span>
     `
-    : product.is_liquidation === true
-      ? `
-        <span class="badge">
-          🔥 LIQUIDACIÓN
-        </span>
-      `
-      : `
-        <span class="badge">
-          🔥 OFERTA
-        </span>
-      `
-              }
+    : ""
+}
 
               <img
                 src="${image}"
