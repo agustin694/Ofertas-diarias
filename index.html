@@ -38,7 +38,12 @@
     }
 
     header {
-      background: linear-gradient(135deg, #171717, #292929);
+  background:
+  linear-gradient(
+    135deg,
+    #ff4b3e,
+    #ff7a6e
+  );
       color: white;
       padding: 22px 15px;
       text-align: center;
@@ -47,17 +52,28 @@
       z-index: 100;
       box-shadow: 0 4px 18px rgba(0,0,0,.12);
     }
+    .brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+    }
 
     header h1 {
-      font-size: 30px;
-      font-weight: 900;
-      letter-spacing: .5px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 8px rgba(0,0,0,.18);
     }
 
     header p {
       margin-top: 6px;
-      color: #ddd;
-      font-size: 14px;
+      color: rgba(255,255,255,.92);
+font-size: 15px;
+font-weight: 500;
+letter-spacing: .2px;
     }
 
     .container {
@@ -730,13 +746,21 @@
 
 <header>
 
-  <h1>🔥 OFERTAS DEL DÍA</h1>
+  <header>
 
-  <p>
-    Encontrá productos a excelentes precios
-  </p>
+  <div class="brand">
 
-</header>
+    <h1>
+      QUINTA MARKET
+    </h1>
+
+    <p>
+      Todo lo que buscás, en un solo lugar
+    </p>
+
+  </div>
+
+  </header>
 
 
 <div class="container">
